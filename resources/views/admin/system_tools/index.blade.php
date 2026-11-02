@@ -3,28 +3,20 @@
 @section('title', 'System Tools & Database Migration Console')
 
 @section('content')
-<div class="content-wrapper">
-    <!-- Content Header -->
-    <section class="content-header pb-2">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <div>
-                <h4 class="mb-0 text-dark fw-bold">
-                    <i class="fa fa-cogs text-primary me-2"></i> System Tools & Live Maintenance Console
-                </h4>
-                <small class="text-muted">Manage Database, Run Migrations, Storage Link, Cache Clear & Artisan Commands</small>
-            </div>
-            <div>
-                <span class="badge {{ $dbStatus['connected'] ? 'bg-success' : 'bg-danger' }} fs-6 px-3 py-2 shadow-sm">
-                    <i class="fa {{ $dbStatus['connected'] ? 'fa-check-circle' : 'fa-times-circle' }} me-1"></i>
-                    {{ $dbStatus['connected'] ? 'DB Connected (' . $tableCount . ' Tables)' : 'DB Disconnected' }}
-                </span>
-            </div>
-        </div>
-    </section>
+<div class="dash-page-head">
+    <div>
+        <h1><i class="fa fa-cogs text-warning me-2"></i> System Tools & Live Maintenance Console</h1>
+        <div class="crumb">Home <i class="fa fa-angle-right mx-1"></i> System Tools</div>
+    </div>
+    <div>
+        <span class="badge {{ $dbStatus['connected'] ? 'bg-success' : 'bg-danger' }} fs-6 px-3 py-2 shadow-sm">
+            <i class="fa {{ $dbStatus['connected'] ? 'fa-check-circle' : 'fa-times-circle' }} me-1"></i>
+            {{ $dbStatus['connected'] ? 'DB Connected (' . $tableCount . ' Tables)' : 'DB Disconnected' }}
+        </span>
+    </div>
+</div>
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="row">
+<div class="row">
             <!-- Left Column: Database Setup & Migration -->
             <div class="col-lg-6 col-12 mb-4">
                 <!-- 1. Database Configuration Card -->
@@ -210,10 +202,8 @@
 Click any button above or run commands to see output here.
                     </div>
                 </div>
-            </div>
         </div>
-    </section>
-</div>
+    </div>
 @endsection
 
 @push('scripts')

@@ -1,241 +1,164 @@
 @extends('layouts.admin')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Dashboard')
 
 @section('content')
-<div class="container-fluid px-0">
-    <!-- Notice if DB not migrated yet -->
-    @if(!$dbConnected || ($stats['opd_count'] == 0 && $stats['appointment_count'] == 0))
-    <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center justify-content-between p-3 mb-4 rounded-3">
-        <div class="d-flex align-items-center">
-            <i class="fa fa-exclamation-triangle fs-3 text-warning me-3"></i>
-            <div>
-                <h6 class="mb-1 fw-bold text-dark">Database Setup & Migration Required</h6>
-                <p class="mb-0 small text-muted">Aap live database create aur poora 205 tables ka schema System Tools page se 1-click me import kar sakte hain.</p>
-            </div>
-        </div>
-        <a href="{{ route('system_tools.index') }}" class="btn btn-warning btn-sm fw-bold px-3 shadow-sm">
-            <i class="fa fa-cogs me-1"></i> Open System Tools
+<!-- ═══════════ Page header ═══════════ -->
+<div class="dash-page-head">
+    <div>
+        <h1>Hospital Dashboard</h1>
+        <div class="crumb">Home <i class="fa fa-angle-right mx-1"></i> Dashboard</div>
+    </div>
+    <div class="dash-btn-row">
+        <a href="{{ route('system_tools.index') }}" class="dash-btn primary">
+            <i class="fa fa-cogs"></i> System Tools & Migration
         </a>
     </div>
-    @endif
+</div>
 
-    <!-- Top Counter Widgets -->
-    <div class="row g-3 mb-4">
-        <!-- OPD -->
-        <div class="col-xl-3 col-md-6 col-12">
-            <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
-                <div class="card-body p-3 d-flex align-items-center">
-                    <div class="rounded-3 bg-primary bg-opacity-10 p-3 me-3 text-primary">
-                        <i class="fa fa-stethoscope fa-2x"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted small text-uppercase fw-semibold">OPD Patients</span>
-                        <h3 class="mb-0 fw-bold text-dark">{{ $stats['opd_count'] }}</h3>
-                    </div>
-                </div>
-                <div class="bg-primary text-white text-center py-1 small">
-                    <a href="{{ route('opd.index') }}" class="text-white text-decoration-none">View OPD Details <i class="fa fa-arrow-circle-right ms-1"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <!-- IPD -->
-        <div class="col-xl-3 col-md-6 col-12">
-            <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
-                <div class="card-body p-3 d-flex align-items-center">
-                    <div class="rounded-3 bg-success bg-opacity-10 p-3 me-3 text-success">
-                        <i class="fa fa-bed fa-2x"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted small text-uppercase fw-semibold">IPD Patients</span>
-                        <h3 class="mb-0 fw-bold text-dark">{{ $stats['ipd_count'] }}</h3>
-                    </div>
-                </div>
-                <div class="bg-success text-white text-center py-1 small">
-                    <a href="{{ route('ipd.index') }}" class="text-white text-decoration-none">View IPD Details <i class="fa fa-arrow-circle-right ms-1"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pharmacy -->
-        <div class="col-xl-3 col-md-6 col-12">
-            <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
-                <div class="card-body p-3 d-flex align-items-center">
-                    <div class="rounded-3 bg-info bg-opacity-10 p-3 me-3 text-info">
-                        <i class="fa fa-mortar-pestle fa-2x"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted small text-uppercase fw-semibold">Pharmacy Bills</span>
-                        <h3 class="mb-0 fw-bold text-dark">{{ $stats['pharmacy_count'] }}</h3>
-                    </div>
-                </div>
-                <div class="bg-info text-white text-center py-1 small">
-                    <a href="{{ route('pharmacy.index') }}" class="text-white text-decoration-none">View Pharmacy <i class="fa fa-arrow-circle-right ms-1"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pathology -->
-        <div class="col-xl-3 col-md-6 col-12">
-            <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
-                <div class="card-body p-3 d-flex align-items-center">
-                    <div class="rounded-3 bg-warning bg-opacity-10 p-3 me-3 text-warning">
-                        <i class="fa fa-flask fa-2x"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted small text-uppercase fw-semibold">Pathology Tests</span>
-                        <h3 class="mb-0 fw-bold text-dark">{{ $stats['pathology_count'] }}</h3>
-                    </div>
-                </div>
-                <div class="bg-warning text-white text-center py-1 small">
-                    <a href="{{ route('pathology.index') }}" class="text-white text-decoration-none">View Pathology <i class="fa fa-arrow-circle-right ms-1"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Radiology -->
-        <div class="col-xl-3 col-md-6 col-12">
-            <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
-                <div class="card-body p-3 d-flex align-items-center">
-                    <div class="rounded-3 bg-danger bg-opacity-10 p-3 me-3 text-danger">
-                        <i class="fa fa-microscope fa-2x"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted small text-uppercase fw-semibold">Radiology Tests</span>
-                        <h3 class="mb-0 fw-bold text-dark">{{ $stats['radiology_count'] }}</h3>
-                    </div>
-                </div>
-                <div class="bg-danger text-white text-center py-1 small">
-                    <a href="{{ route('radiology.index') }}" class="text-white text-decoration-none">View Radiology <i class="fa fa-arrow-circle-right ms-1"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Blood Bank -->
-        <div class="col-xl-3 col-md-6 col-12">
-            <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
-                <div class="card-body p-3 d-flex align-items-center">
-                    <div class="rounded-3 bg-secondary bg-opacity-10 p-3 me-3 text-secondary">
-                        <i class="fa fa-tint fa-2x"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted small text-uppercase fw-semibold">Blood Bank Issues</span>
-                        <h3 class="mb-0 fw-bold text-dark">{{ $stats['blood_bank_count'] }}</h3>
-                    </div>
-                </div>
-                <div class="bg-secondary text-white text-center py-1 small">
-                    <a href="{{ route('blood_bank.index') }}" class="text-white text-decoration-none">View Blood Bank <i class="fa fa-arrow-circle-right ms-1"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ambulance -->
-        <div class="col-xl-3 col-md-6 col-12">
-            <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
-                <div class="card-body p-3 d-flex align-items-center">
-                    <div class="rounded-3 bg-dark bg-opacity-10 p-3 me-3 text-dark">
-                        <i class="fa fa-ambulance fa-2x"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted small text-uppercase fw-semibold">Ambulance Calls</span>
-                        <h3 class="mb-0 fw-bold text-dark">{{ $stats['ambulance_count'] }}</h3>
-                    </div>
-                </div>
-                <div class="bg-dark text-white text-center py-1 small">
-                    <a href="{{ route('admin.dashboard') }}" class="text-white text-decoration-none">View Ambulance <i class="fa fa-arrow-circle-right ms-1"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Appointments -->
-        <div class="col-xl-3 col-md-6 col-12">
-            <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
-                <div class="card-body p-3 d-flex align-items-center">
-                    <div class="rounded-3 bg-primary bg-opacity-10 p-3 me-3 text-primary">
-                        <i class="fa fa-calendar-check fa-2x"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted small text-uppercase fw-semibold">Appointments</span>
-                        <h3 class="mb-0 fw-bold text-dark">{{ $stats['appointment_count'] }}</h3>
-                    </div>
-                </div>
-                <div class="bg-primary text-white text-center py-1 small">
-                    <a href="{{ route('appointments.index') }}" class="text-white text-decoration-none">View Appointments <i class="fa fa-arrow-circle-right ms-1"></i></a>
-                </div>
-            </div>
+<!-- Notice if DB not migrated yet -->
+@if(!$dbConnected || ($stats['opd_count'] == 0 && $stats['appointment_count'] == 0))
+<div class="alert alert-warning border-0 shadow-sm d-flex align-items-center justify-content-between p-3 mb-4 rounded-3">
+    <div class="d-flex align-items-center">
+        <i class="fa fa-exclamation-triangle fs-3 text-warning me-3"></i>
+        <div>
+            <h6 class="mb-1 fw-bold text-dark">Database Setup & Full Migration Required</h6>
+            <p class="mb-0 small text-muted">Aap live database create aur poora 205 tables ka schema System Tools page se 1-click me import kar sakte hain.</p>
         </div>
     </div>
+    <a href="{{ route('system_tools.index') }}" class="btn btn-warning btn-sm fw-bold px-3 shadow-sm">
+        <i class="fa fa-cogs me-1"></i> Open System Tools
+    </a>
+</div>
+@endif
 
-    <!-- Quick Tools Bar -->
-    <div class="card border-0 shadow-sm rounded-3 mb-4">
-        <div class="card-header bg-white py-3 border-0">
-            <h6 class="mb-0 fw-bold text-dark"><i class="fa fa-bolt text-warning me-2"></i> Quick Actions & Maintenance</h6>
+<!-- ═══════════ Hero KPIs (4 tiles with sparkline + delta) ═══════════ -->
+<div class="kpi-grid">
+    <!-- OPD -->
+    <a class="kpi s-blue" href="{{ route('opd.index') }}">
+        <div class="kpi-label">OPD Patients · Total</div>
+        <div class="kpi-value">{{ $stats['opd_count'] }}</div>
+        <div class="kpi-delta"><i class="fas fa-stethoscope"></i> Out Patient Department</div>
+        <svg class="kpi-spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
+            <path class="fill" d="M0,26 L20,22 L40,24 L60,18 L80,16 L100,10 L120,8 L120,32 L0,32 Z"/>
+            <path class="line" d="M0,26 L20,22 L40,24 L60,18 L80,16 L100,10 L120,8"/>
+        </svg>
+    </a>
+
+    <!-- IPD -->
+    <a class="kpi s-teal" href="{{ route('ipd.index') }}">
+        <div class="kpi-label">IPD Patients · In Ward</div>
+        <div class="kpi-value">{{ $stats['ipd_count'] }}</div>
+        <div class="kpi-delta"><i class="fas fa-bed"></i> In Patient Department</div>
+        <svg class="kpi-spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
+            <path class="fill" d="M0,18 L20,20 L40,16 L60,14 L80,12 L100,14 L120,10 L120,32 L0,32 Z"/>
+            <path class="line" d="M0,18 L20,20 L40,16 L60,14 L80,12 L100,14 L120,10"/>
+        </svg>
+    </a>
+
+    <!-- Appointments -->
+    <a class="kpi s-green" href="{{ route('appointments.index') }}">
+        <div class="kpi-label">Doctor Appointments</div>
+        <div class="kpi-value">{{ $stats['appointment_count'] }}</div>
+        <div class="kpi-delta"><i class="fas fa-calendar-check"></i> Scheduled Visits</div>
+        <svg class="kpi-spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
+            <path class="fill" d="M0,24 L20,22 L40,20 L60,22 L80,16 L100,14 L120,12 L120,32 L0,32 Z"/>
+            <path class="line" d="M0,24 L20,22 L40,20 L60,22 L80,16 L100,14 L120,12"/>
+        </svg>
+    </a>
+
+    <!-- Pharmacy Bills -->
+    <a class="kpi s-amber" href="{{ route('pharmacy.index') }}">
+        <div class="kpi-label">Pharmacy Sales / Bills</div>
+        <div class="kpi-value">{{ $stats['pharmacy_count'] }}</div>
+        <div class="kpi-delta"><i class="fas fa-mortar-pestle"></i> Medicine Dispensary</div>
+        <svg class="kpi-spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
+            <path class="fill" d="M0,14 L20,16 L40,18 L60,16 L80,20 L100,22 L120,24 L120,32 L0,32 Z"/>
+            <path class="line" d="M0,14 L20,16 L40,18 L60,16 L80,20 L100,22 L120,24"/>
+        </svg>
+    </a>
+</div>
+
+<!-- ═══════════ Operations snapshot (4 cards) ═══════════ -->
+<div class="ops-grid">
+    <!-- Pathology -->
+    <div class="ops-card">
+        <div class="head">
+            <div class="ic blue"><i class="fas fa-flask"></i></div>
+            <div class="lbl">Pathology Lab</div>
+            <a class="meta" href="{{ route('pathology.index') }}">View</a>
         </div>
-        <div class="card-body pt-0">
-            <div class="d-flex flex-wrap gap-2">
-                <a href="{{ route('system_tools.index') }}" class="btn btn-sm btn-outline-primary shadow-sm">
-                    <i class="fa fa-cogs me-1"></i> System Tools & Migration
-                </a>
-                <a href="{{ route('opd.index') }}" class="btn btn-sm btn-outline-success shadow-sm">
-                    <i class="fa fa-user-plus me-1"></i> New OPD Patient
-                </a>
-                <a href="{{ route('appointments.index') }}" class="btn btn-sm btn-outline-info shadow-sm">
-                    <i class="fa fa-calendar-plus me-1"></i> Book Appointment
-                </a>
-                <a href="{{ route('billing.index') }}" class="btn btn-sm btn-outline-warning text-dark shadow-sm">
-                    <i class="fa fa-file-invoice me-1"></i> Generate Bill
-                </a>
-                <a href="{{ route('staff.index') }}" class="btn btn-sm btn-outline-dark shadow-sm">
-                    <i class="fa fa-user-md me-1"></i> Staff Directory
-                </a>
-            </div>
-        </div>
+        <div class="big">{{ $stats['pathology_count'] }}</div>
+        <div class="sub">Total lab tests and investigations</div>
     </div>
 
-    <!-- Recent Appointments Table -->
-    <div class="card border-0 shadow-sm rounded-3">
-        <div class="card-header bg-white py-3 d-flex align-items-center justify-content-between border-0">
-            <h6 class="mb-0 fw-bold text-dark"><i class="fa fa-calendar-alt text-primary me-2"></i> Recent Appointments</h6>
-            <a href="{{ route('appointments.index') }}" class="btn btn-sm btn-outline-primary">View All</a>
+    <!-- Radiology -->
+    <div class="ops-card">
+        <div class="head">
+            <div class="ic teal"><i class="fas fa-microscope"></i></div>
+            <div class="lbl">Radiology Scans</div>
+            <a class="meta" href="{{ route('radiology.index') }}">View</a>
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover table-striped align-middle mb-0 small">
-                    <thead class="table-light">
-                        <tr>
-                            <th>#</th>
-                            <th>Patient Name</th>
-                            <th>Phone</th>
-                            <th>Doctor</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($recentAppointments as $app)
-                        <tr>
-                            <td>{{ $app->id }}</td>
-                            <td class="fw-semibold">{{ $app->patient_name ?? 'N/A' }}</td>
-                            <td>{{ $app->mobileno ?? 'N/A' }}</td>
-                            <td>{{ $app->doctor ?? 'Dr. Specialist' }}</td>
-                            <td>{{ $app->date ?? date('Y-m-d') }}</td>
-                            <td>
-                                <span class="badge bg-success">Approved</span>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center py-4 text-muted">
-                                <i class="fa fa-folder-open fa-2x mb-2 d-block"></i>
-                                No appointment records found in database.
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <div class="big">{{ $stats['radiology_count'] }}</div>
+        <div class="sub">X-Ray, CT Scan, Ultrasound, MRI</div>
     </div>
+
+    <!-- Blood Bank -->
+    <div class="ops-card">
+        <div class="head">
+            <div class="ic red"><i class="fas fa-tint"></i></div>
+            <div class="lbl">Blood Bank</div>
+            <a class="meta" href="{{ route('blood_bank.index') }}">Inventory</a>
+        </div>
+        <div class="big">{{ $stats['blood_bank_count'] }}</div>
+        <div class="sub">Blood issue and donor cycles</div>
+    </div>
+
+    <!-- Ambulance -->
+    <div class="ops-card">
+        <div class="head">
+            <div class="ic amber"><i class="fas fa-ambulance"></i></div>
+            <div class="lbl">Ambulance Service</div>
+            <a class="meta" href="{{ route('admin.dashboard') }}">Fleet</a>
+        </div>
+        <div class="big">{{ $stats['ambulance_count'] }}</div>
+        <div class="sub">Emergency vehicle dispatches</div>
+    </div>
+</div>
+
+<!-- ═══════════ Recent Appointments Table ═══════════ -->
+<div class="dash-table-card">
+    <div class="dash-table-card-h">
+        <h3><i class="fa fa-calendar-check-o text-primary me-2"></i> Recent Doctor Appointments</h3>
+        <a href="{{ route('appointments.index') }}" class="dash-btn sm">View All</a>
+    </div>
+    <table class="dash-tbl">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Patient Name</th>
+                <th>Contact</th>
+                <th>Doctor</th>
+                <th>Appointment Date</th>
+                <th class="num">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($recentAppointments as $app)
+            <tr>
+                <td><strong>APT{{ $app->id }}</strong></td>
+                <td>{{ $app->patient_name ?? 'N/A' }}</td>
+                <td>{{ $app->mobileno ?? 'N/A' }}</td>
+                <td>Dr. {{ $app->doctor ?? 'Specialist' }}</td>
+                <td>{{ $app->date ?? date('Y-m-d') }}</td>
+                <td class="num"><span class="badge-pill ok">Approved</span></td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="6" class="empty">No appointment records found in database. Run migration from System Tools.</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
 </div>
 @endsection

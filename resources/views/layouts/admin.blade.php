@@ -52,123 +52,119 @@
 </head>
 <body class="variant-clinical" data-preset="clinical" data-chrome="dashboard">
 <script>
-/* Sidebar collapsed state restore */
+/* Sidebar collapsed-state restore */
 (function(){try{if(localStorage.getItem('sh_sidebar_collapsed')==='1'){document.body.classList.add('sidebar-collapsed');}}catch(e){}})();
 </script>
 
 <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
-<aside class="sh-sidebar" id="shSidebar">
+<nav class="sh-sidebar" id="sidebar">
   <!-- Brand logo -->
-  <div class="sidebar-brand">
-    <a href="{{ route('admin.dashboard') }}" class="brand-link">
-      <img src="{{ asset('backend/images/s_logo.png') }}" alt="Logo" class="brand-image">
-      <span class="brand-text">Smart Hospital</span>
+  <div class="sh-sidebar-brand">
+    <a href="{{ route('admin.dashboard') }}" class="sh-sidebar-logo">
+      <img src="{{ asset('backend/images/s_logo.png') }}" alt="Logo" class="sh-sidebar-logo-img">
+      <span class="sh-sidebar-name">Smart Hospital</span>
     </a>
   </div>
 
-  <!-- Sidebar Nav Menu -->
-  <div class="sidebar-content">
-    <nav class="sidebar-nav">
-      <ul class="nav-list">
-        <!-- Dashboard -->
-        <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-          <a href="{{ route('admin.dashboard') }}" class="nav-link" data-tooltip="Dashboard">
-            <i class="nav-icon fa fa-television"></i>
-            <span class="nav-title">Dashboard</span>
-          </a>
-        </li>
-
-        <!-- System Tools & Maintenance (NEW: Web Installer & Artisan Runner) -->
-        <li class="nav-item {{ request()->routeIs('system_tools.*') ? 'active' : '' }}">
-          <a href="{{ route('system_tools.index') }}" class="nav-link text-warning" data-tooltip="System Tools">
-            <i class="nav-icon fa fa-cogs"></i>
-            <span class="nav-title"><b>System Tools</b> <span class="badge bg-warning text-dark ms-1">Migrate/Clear</span></span>
-          </a>
-        </li>
-
-        <!-- Billing -->
-        <li class="nav-item {{ request()->routeIs('billing.*') ? 'active' : '' }}">
-          <a href="{{ route('billing.index') }}" class="nav-link" data-tooltip="Billing">
-            <i class="nav-icon fa fa-file-invoice-dollar"></i>
-            <span class="nav-title">Billing</span>
-          </a>
-        </li>
-
-        <!-- Appointment -->
-        <li class="nav-item {{ request()->routeIs('appointments.*') ? 'active' : '' }}">
-          <a href="{{ route('appointments.index') }}" class="nav-link" data-tooltip="Appointment">
-            <i class="nav-icon fa fa-calendar-check"></i>
-            <span class="nav-title">Appointment</span>
-          </a>
-        </li>
-
-        <!-- OPD - Out Patient -->
-        <li class="nav-item {{ request()->routeIs('opd.*') ? 'active' : '' }}">
-          <a href="{{ route('opd.index') }}" class="nav-link" data-tooltip="OPD - Out Patient">
-            <i class="nav-icon fa fa-stethoscope"></i>
-            <span class="nav-title">OPD - Out Patient</span>
-          </a>
-        </li>
-
-        <!-- IPD - In Patient -->
-        <li class="nav-item {{ request()->routeIs('ipd.*') ? 'active' : '' }}">
-          <a href="{{ route('ipd.index') }}" class="nav-link" data-tooltip="IPD - In Patient">
-            <i class="nav-icon fa fa-bed"></i>
-            <span class="nav-title">IPD - In Patient</span>
-          </a>
-        </li>
-
-        <!-- Pharmacy -->
-        <li class="nav-item {{ request()->routeIs('pharmacy.*') ? 'active' : '' }}">
-          <a href="{{ route('pharmacy.index') }}" class="nav-link" data-tooltip="Pharmacy">
-            <i class="nav-icon fa fa-mortar-pestle"></i>
-            <span class="nav-title">Pharmacy</span>
-          </a>
-        </li>
-
-        <!-- Pathology -->
-        <li class="nav-item {{ request()->routeIs('pathology.*') ? 'active' : '' }}">
-          <a href="{{ route('pathology.index') }}" class="nav-link" data-tooltip="Pathology">
-            <i class="nav-icon fa fa-flask"></i>
-            <span class="nav-title">Pathology</span>
-          </a>
-        </li>
-
-        <!-- Radiology -->
-        <li class="nav-item {{ request()->routeIs('radiology.*') ? 'active' : '' }}">
-          <a href="{{ route('radiology.index') }}" class="nav-link" data-tooltip="Radiology">
-            <i class="nav-icon fa fa-microscope"></i>
-            <span class="nav-title">Radiology</span>
-          </a>
-        </li>
-
-        <!-- Blood Bank -->
-        <li class="nav-item {{ request()->routeIs('blood_bank.*') ? 'active' : '' }}">
-          <a href="{{ route('blood_bank.index') }}" class="nav-link" data-tooltip="Blood Bank">
-            <i class="nav-icon fa fa-tint"></i>
-            <span class="nav-title">Blood Bank</span>
-          </a>
-        </li>
-
-        <!-- Human Resource -->
-        <li class="nav-item {{ request()->routeIs('staff.*') ? 'active' : '' }}">
-          <a href="{{ route('staff.index') }}" class="nav-link" data-tooltip="Human Resource">
-            <i class="nav-icon fa fa-sitemap"></i>
-            <span class="nav-title">Human Resource</span>
-          </a>
-        </li>
-
-        <!-- Settings -->
-        <li class="nav-item {{ request()->routeIs('settings.*') ? 'active' : '' }}">
-          <a href="{{ route('settings.index') }}" class="nav-link" data-tooltip="Setup">
-            <i class="nav-icon fa fa-sliders"></i>
-            <span class="nav-title">Setup / Settings</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+  <!-- Menu filter -->
+  <div class="sh-sidebar-search">
+    <div class="input-group input-group-sm">
+      <span class="input-group-text"><i class="fa fa-search"></i></span>
+      <input type="text" id="sidebar-menu-filter" class="form-control" placeholder="Search menu..." autocomplete="off">
+    </div>
   </div>
-</aside>
+
+  <!-- Navigation menu -->
+  <div class="sh-sidebar-scroll">
+    <ul class="sh-nav" id="sh-sidenav">
+      <li class="sh-section">CORE OPERATIONS</li>
+
+      <!-- Dashboard -->
+      <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.dashboard') }}">
+          <i class="fas fa-television"></i> <span>Dashboard</span>
+        </a>
+      </li>
+
+      <!-- System Tools & Live Maintenance -->
+      <li class="nav-item {{ request()->routeIs('system_tools.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('system_tools.index') }}" style="color: #f59e0b !important;">
+          <i class="fas fa-cogs" style="color: #f59e0b;"></i> <span>System Tools</span>
+        </a>
+      </li>
+
+      <!-- Billing -->
+      <li class="nav-item {{ request()->routeIs('billing.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('billing.index') }}">
+          <i class="fas fa-file-invoice"></i> <span>Billing</span>
+        </a>
+      </li>
+
+      <!-- Appointment -->
+      <li class="nav-item {{ request()->routeIs('appointments.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('appointments.index') }}">
+          <i class="fa fa-calendar-check-o"></i> <span>Appointment</span>
+        </a>
+      </li>
+
+      <!-- OPD - Out Patient -->
+      <li class="nav-item {{ request()->routeIs('opd.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('opd.index') }}">
+          <i class="fas fa-stethoscope"></i> <span>OPD - Out Patient</span>
+        </a>
+      </li>
+
+      <!-- IPD - In Patient -->
+      <li class="nav-item {{ request()->routeIs('ipd.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('ipd.index') }}">
+          <i class="fas fa-bed"></i> <span>IPD - In Patient</span>
+        </a>
+      </li>
+
+      <!-- Pharmacy -->
+      <li class="nav-item {{ request()->routeIs('pharmacy.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('pharmacy.index') }}">
+          <i class="fas fa-mortar-pestle"></i> <span>Pharmacy</span>
+        </a>
+      </li>
+
+      <!-- Pathology -->
+      <li class="nav-item {{ request()->routeIs('pathology.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('pathology.index') }}">
+          <i class="fas fa-flask"></i> <span>Pathology</span>
+        </a>
+      </li>
+
+      <!-- Radiology -->
+      <li class="nav-item {{ request()->routeIs('radiology.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('radiology.index') }}">
+          <i class="fas fa-microscope"></i> <span>Radiology</span>
+        </a>
+      </li>
+
+      <!-- Blood Bank -->
+      <li class="nav-item {{ request()->routeIs('blood_bank.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('blood_bank.index') }}">
+          <i class="fas fa-tint"></i> <span>Blood Bank</span>
+        </a>
+      </li>
+
+      <!-- Human Resource -->
+      <li class="nav-item {{ request()->routeIs('staff.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('staff.index') }}">
+          <i class="fas fa-sitemap"></i> <span>Human Resource</span>
+        </a>
+      </li>
+
+      <!-- Settings -->
+      <li class="nav-item {{ request()->routeIs('settings.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('settings.index') }}">
+          <i class="fas fa-sliders-h"></i> <span>Setup / Settings</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
 <!-- ═══════════════════ TOP BAR ═══════════════════ -->
 <header class="topbar">
@@ -178,23 +174,34 @@
   </button>
 
   <div class="tb-module">
-    <span class="tb-module-name">Smart Hospital Management System</span>
+    <div class="ic"><i class="fa fa-hospital-o"></i></div>
+    Smart Hospital Management
   </div>
 
-  <div class="tb-right ms-auto d-flex align-items-center gap-2">
-    <!-- Live Console Quick Shortcut -->
-    <a href="{{ route('system_tools.index') }}" class="btn btn-sm btn-outline-warning text-dark fw-bold px-2 py-1" title="System Tools">
-      <i class="fa fa-terminal"></i> <span class="d-none d-md-inline">Console</span>
+  <div class="sh-tb-flex-spacer"></div>
+
+  <!-- Right actions -->
+  <div class="tb-rail">
+    <!-- Quick System Tools Button -->
+    <a href="{{ route('system_tools.index') }}" class="tb-btn" title="Live Database Migration & Console">
+      <i class="fa fa-cogs" style="color: #f59e0b;"></i>
     </a>
 
-    <!-- User Profile Dropdown -->
+    <!-- User signet -->
     <div class="dropdown">
-      <button class="btn btn-sm dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
-        <img src="{{ asset('backend/images/default.jpg') }}" alt="User" class="rounded-circle" width="30" height="30">
-        <span class="d-none d-md-inline fw-semibold">{{ auth()->check() ? auth()->user()->full_name : 'Admin' }}</span>
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-        <li><h6 class="dropdown-header">{{ auth()->check() ? auth()->user()->email : 'admin@smart-hospital.com' }}</h6></li>
+      <a class="tb-signet" href="#" data-bs-toggle="dropdown">
+        <img src="{{ asset('backend/images/default.jpg') }}" alt="User">
+        <div class="tb-signet-text">
+          <span class="tb-signet-name">{{ auth()->check() ? auth()->user()->full_name : 'Super Admin' }}</span>
+          <span class="tb-signet-role">Admin</span>
+        </div>
+        <i class="fa fa-angle-down"></i>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end sh-tb-dropdown-user">
+        <li class="px-3 py-2 border-bottom">
+          <div class="fw-bold">{{ auth()->check() ? auth()->user()->full_name : 'Super Admin' }}</div>
+          <div class="text-muted small">{{ auth()->check() ? auth()->user()->email : 'admin@smart-hospital.com' }}</div>
+        </li>
         <li><a class="dropdown-item" href="{{ route('system_tools.index') }}"><i class="fa fa-cogs me-2"></i> System Tools</a></li>
         <li><hr class="dropdown-divider"></li>
         <li>
@@ -209,17 +216,17 @@
 </header>
 
 <!-- ═══════════════════ MAIN CONTENT AREA ═══════════════════ -->
-<main class="content-wrapper p-3 p-md-4">
+<main class="content">
   @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      {{ session('success') }}
+    <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+      <i class="fa fa-check-circle me-1"></i> {{ session('success') }}
       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
   @endif
 
   @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      {{ session('error') }}
+    <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+      <i class="fa fa-exclamation-circle me-1"></i> {{ session('error') }}
       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
   @endif
@@ -244,6 +251,19 @@ document.addEventListener('DOMContentLoaded', function() {
         var collapsed = document.body.classList.toggle('sidebar-collapsed');
         localStorage.setItem('sh_sidebar_collapsed', collapsed ? '1' : '0');
       }
+    });
+  }
+
+  // Quick filter for sidebar menu
+  var filterInput = document.getElementById('sidebar-menu-filter');
+  if (filterInput) {
+    filterInput.addEventListener('keyup', function() {
+      var val = this.value.toLowerCase();
+      var items = document.querySelectorAll('#sh-sidenav .nav-item');
+      items.forEach(function(item) {
+        var text = item.textContent.toLowerCase();
+        item.style.display = text.indexOf(val) > -1 ? '' : 'none';
+      });
     });
   }
 });
